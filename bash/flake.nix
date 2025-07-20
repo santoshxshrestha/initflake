@@ -14,8 +14,6 @@
           bash-language-server
           bats
           jq
-          curl
-          git
         ];
         shellHook = ''
           # Bash development environment ready
