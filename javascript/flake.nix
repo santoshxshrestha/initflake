@@ -9,7 +9,6 @@
       devShells.${system}.default = pkgs.mkShell {
         buildInputs = with pkgs; [
           nodejs
-          npm
           yarn
           pnpm
           # nodePackages.typescript
