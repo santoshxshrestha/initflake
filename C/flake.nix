@@ -17,6 +17,7 @@
           # valgrind
           pkg-config
           clang-tools
+          bear
         ];
         shellHook = ''
           export CC=gcc
