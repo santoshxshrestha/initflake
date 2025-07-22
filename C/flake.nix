@@ -8,6 +8,9 @@
     in {
       devShells.${system}.default = pkgs.mkShell {
         buildInputs = with pkgs; [
+          # clang-tools should come before the clang I read it some where
+          # the clang does not matters because you will ditch it for the gcc or g++ I know 
+          clang-tools
           gcc
           clang
           cmake
@@ -16,7 +19,6 @@
           gdb
           # valgrind
           pkg-config
-          clang-tools
           bear
         ];
         shellHook = ''
