@@ -3,7 +3,7 @@
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-  outputs = { self, inputs }:
+  outputs = inputs:
     let
       goVersion = 23;
 
