@@ -27,16 +27,7 @@
           nodePackages.prettier
           nodePackages.typescript-language-server
         ];
-        packages."${system}".default = pkgs.rustPlatform.buildRustPackage {
-          name = "project";
-          src = ./.;
-          # cargoLock = ./Cargo.lock;
-          buildInputs = with pkgs; [ openssl ];
-          nativeBuildInputs = [ pkgs.pkg-config ];
-          # cargoHash = pkgs.lib.fakeHash;
-          cargoLock.lockFile = ./Cargo.lock;
-        };
-
+        packages.${system}.default = pkgs.callPackage ./nix/default.nix { };
         nativeBuildInputs = [ pkgs.pkg-config ];
 
         env.RUST_SRC_PATH =

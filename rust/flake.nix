@@ -10,7 +10,7 @@
       pkgs = nixpkgs.legacyPackages.${system};
     in {
 
-      packages."${system}".default = pkgs.callPackage ./nix/default.nix { };
+      packages.${system}.default = pkgs.callPackage ./nix/default.nix { };
       devShells.${system}.default = pkgs.mkShell {
         buildInputs = with pkgs; [
           rustc
