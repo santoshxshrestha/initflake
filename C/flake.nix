@@ -18,9 +18,9 @@
           # make
           gdb
           # valgrind
-          pkg-config
           bear
         ];
+        nativeBuildInputs = [ pkgs.pkg-config ];
         env = {
           CC = "gcc";
           CXX = "g++";

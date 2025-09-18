@@ -17,7 +17,6 @@
           rustfmt
           openssl
           rust-analyzer
-          pkg-config
 
           yarn
           pnpm
@@ -26,6 +25,8 @@
           nodePackages.prettier
           nodePackages.typescript-language-server
         ];
+
+        nativeBuildInputs = [ pkgs.pkg-config ];
 
         env.RUST_SRC_PATH =
           "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
