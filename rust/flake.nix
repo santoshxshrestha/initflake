@@ -10,16 +10,7 @@
       pkgs = nixpkgs.legacyPackages.${system};
     in {
 
-      packages."${system}".default = pkgs.rustPlatform.buildRustPackage {
-        name = "project";
-        src = ./.;
-        # cargoLock = ./Cargo.lock;
-        buildInputs = with pkgs; [ openssl ];
-        nativeBuildInputs = [ pkgs.pkg-config ];
-        # cargoHash = pkgs.lib.fakeHash;
-        cargoLock.lockFile = ./Cargo.lock;
-      };
-
+      packages."${system}".default = pkgs.callPackage ./nix/default.nix { };
       devShells.${system}.default = pkgs.mkShell {
         buildInputs = with pkgs; [
           rustc
