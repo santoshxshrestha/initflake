@@ -6,7 +6,9 @@
   outputs = { self, nixpkgs }:
     let
       system = "x86_64-linux";
-      pkgs = import nixpkgs { inherit system; };
+      # pkgs = import nixpkgs { inherit system; };
+      pkgs = nixpkgs.legacyPackages.${system};
+
     in {
       devShells.${system}.default = pkgs.mkShell {
         buildInputs = with pkgs; [
@@ -25,6 +27,15 @@
           nodePackages.prettier
           nodePackages.typescript-language-server
         ];
+        packages."${system}".default = pkgs.rustPlatform.buildRustPackage {
+          name = "project";
+          src = ./.;
+          # cargoLock = ./Cargo.lock;
+          buildInputs = with pkgs; [ openssl ];
+          nativeBuildInputs = [ pkgs.pkg-config ];
+          # cargoHash = pkgs.lib.fakeHash;
+          cargoLock.lockFile = ./Cargo.lock;
+        };
 
         nativeBuildInputs = [ pkgs.pkg-config ];
 
