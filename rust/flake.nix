@@ -25,6 +25,7 @@
           clippy
           rustfmt
           openssl
+          cargo-watch
           rust-analyzer
         ];
         nativeBuildInputs = [ pkgs.pkg-config ];

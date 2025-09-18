@@ -19,15 +19,17 @@
       };
       devShells.${system}.default = pkgs.mkShell {
         buildInputs = with pkgs; [
-          nodejs
           rustc
           cargo
-          clippy
-          rustfmt
-          openssl
           rust-analyzer
+          clippy
+          cargo-watch
+          rustfmt
+
+          openssl
 
           yarn
+          nodejs
           pnpm
           # nodePackages.typescript
           nodePackages.eslint
@@ -35,12 +37,11 @@
           nodePackages.typescript-language-server
         ];
 
-        formatter = pkgs.rustfmt;
-
         nativeBuildInputs = [ pkgs.pkg-config ];
 
         env.RUST_SRC_PATH =
           "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
       };
+      formatter = pkgs.rustfmt;
     };
 }
