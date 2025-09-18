@@ -5,13 +5,20 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    naersk.url = "github:nix-community/naersk";
   };
 
-  outputs = { self, nixpkgs, flake-utils, ... }:
+  outputs = { nixpkgs, flake-utils, naersk, ... }:
     flake-utils.lib.eachDefaultSystem (system:
-      let pkgs = import nixpkgs { inherit system; };
+      let
+        pkgs = import nixpkgs { inherit system; };
+        naerskLib = pkgs.callPackage naersk { };
       in {
-        packages.default = pkgs.callPackage ./nix/default.nix { };
+        packages.default = naerskLib.buildPackage {
+          src = ./.;
+          buildInputs = with pkgs; [ openssl ];
+          nativeBuildInputs = [ pkgs.pkg-config ];
+        };
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
             rustc
