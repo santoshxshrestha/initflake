@@ -1,30 +1,28 @@
 {
-  description = "A Nix-flake-based Rust development environment";
+  description =
+    "A Nix-flake-based Rust development environment (multi-system, flake-utils)";
 
-  inputs = { nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-unstable"; };
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
+  };
 
-  outputs = { self, nixpkgs }:
-    let
-      system = "x86_64-linux";
-      # pkgs = import nixpkgs { inherit system; };
-      pkgs = nixpkgs.legacyPackages.${system};
-    in {
-
-      packages.${system}.default = pkgs.callPackage ./nix/default.nix { };
-      devShells.${system}.default = pkgs.mkShell {
-        buildInputs = with pkgs; [
-          rustc
-          cargo
-          clippy
-          rustfmt
-          openssl
-          rust-analyzer
-        ];
-
-        nativeBuildInputs = [ pkgs.pkg-config ];
-
-        env.RUST_SRC_PATH =
-          "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
-      };
-    };
+  outputs = { self, nixpkgs, flake-utils, ... }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let pkgs = import nixpkgs { inherit system; };
+      in {
+        packages.default = pkgs.callPackage ./nix/default.nix { };
+        devShells.default = pkgs.mkShell {
+          buildInputs = with pkgs; [
+            rustc
+            cargo
+            clippy
+            rustfmt
+            openssl
+            rust-analyzer
+          ];
+          nativeBuildInputs = [ pkgs.pkg-config ];
+        };
+        formatter = pkgs.rustfmt;
+      });
 }
