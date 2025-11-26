@@ -3,7 +3,7 @@ name: Update Nix Flakes
 on:
   workflow_dispatch: {}
   schedule:
-    - cron: '0 3 * * 1'  # Every Monday 03:00 UTC
+    - cron: "0 3 * * 1" # Every Monday 03:00 UTC
 
 permissions:
   contents: write
@@ -34,10 +34,17 @@ jobs:
             (cd "$dir" && nix flake update)
           done
 
+      - name: Show git status & diff
+        run: |
+          echo "=== git status ==="
+          git status
+          echo "=== changed files (git diff --name-only) ==="
+          git diff --name-only || true
+
       - name: Create Pull Request with updates
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ github.token }}
           commit-message: "chore: update Nix flakes"
           title: "chore: update Nix flakes"
           body: |
@@ -46,6 +53,7 @@ jobs:
             - Time: ${{ github.run_started_at }}
           branch: auto/update-flakes
           delete-branch: true
+          add-paths: "**/flake.lock"
           labels: |
             automated
             nix
