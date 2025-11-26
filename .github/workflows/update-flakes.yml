@@ -1,0 +1,49 @@
+name: Update Nix Flakes
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '0 3 * * 1'  # Every Monday 03:00 UTC
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-flakes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v25
+        with:
+          extra_nix_config: |
+            access-tokens = github=${{ github.token }}
+
+      - name: Update all flake.lock files
+        run: |
+          set -euo pipefail
+          echo "Updating flakes in all top-level directories containing flake.nix"
+          for f in */flake.nix; do
+            dir="${f%/flake.nix}"
+            echo "Updating flake in $dir"
+            (cd "$dir" && nix flake update)
+          done
+
+      - name: Create Pull Request with updates
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ github.token }}
+          commit-message: "chore: update Nix flakes"
+          title: "chore: update Nix flakes"
+          body: |
+            Automated flake input update.
+            - Trigger: ${{ github.event_name }}
+            - Time: ${{ github.run_started_at }}
+          branch: auto/update-flakes
+          delete-branch: true
+          labels: |
+            automated
+            nix
