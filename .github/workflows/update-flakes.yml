@@ -50,6 +50,8 @@ jobs:
             Automated flake input update.
             - Trigger: ${{ github.event_name }}
             - Time: ${{ github.run_started_at }}
+          assignees: santoshxshrestha
+          reviewers: santoshxshrestha
           branch: auto/update-flakes
           delete-branch: true
           add-paths: "**/flake.lock"
