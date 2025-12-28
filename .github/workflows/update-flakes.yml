@@ -40,6 +40,9 @@ jobs:
           echo "=== changed files (git diff --name-only) ==="
           git diff --name-only || true
 
+      - name: Set Nepal time
+        run: echo "NEPAL_TIME=$(TZ=Asia/Kathmandu date +"%Y-%m-%d %H:%M:%S NPT")">>$GITHUB_ENV
+
       - name: Create Pull Request with updates
         uses: peter-evans/create-pull-request@v7
         with:
@@ -49,7 +52,7 @@ jobs:
           body: |
             Automated flake input update.
             - Trigger: ${{ github.event_name }}
-            - Time: ${{ github.run_started_at }}
+            - Time: ${{ env.NEPAL_TIME }}
           assignees: santoshxshrestha
           reviewers: santoshxshrestha
           branch: auto/update-flakes
