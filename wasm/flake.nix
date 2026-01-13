@@ -20,27 +20,26 @@
         nativeBuildInputs = [ pkgs.pkg-config ];
       };
       devShells.${system}.default = pkgs.mkShell {
-        buildInputs = with pkgs; [
-          rustc
-          cargo
-          rust-analyzer
-          clippy
-          cargo-watch
-          rustfmt
+        packages = [
+          pkgs.rustc
+          pkgs.cargo
+          pkgs.rust-analyzer
+          pkgs.clippy
+          pkgs.cargo-watch
+          pkgs.rustfmt
 
-          nodejs
-          pnpm
-          nodePackages.typescript
-          nodePackages.eslint
-          nodePackages.prettier
-          nodePackages.typescript-language-server
+          pkgs.nodejs
+          pkgs.pnpm
+          pkgs.nodePackages.typescript
+          pkgs.nodePackages.eslint
+          pkgs.nodePackages.prettier
+          pkgs.nodePackages.typescript-language-server
 
-          wasm-pack
-          rocmPackages.llvm.lld
+          pkgs.wasm-pack
+          pkgs.rocmPackages.llvm.lld
         ];
 
         nativeBuildInputs = [ pkgs.pkg-config ];
-
       };
       formatter = [
         pkgs.rustfmt

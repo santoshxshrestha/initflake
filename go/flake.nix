@@ -23,15 +23,15 @@
 
       devShells = forEachSupportedSystem ({ pkgs }: {
         default = pkgs.mkShell {
-          packages = with pkgs; [
+          packages = [
             # go (version is specified by overlay)
-            go
+            pkgs.go
 
             # goimports, godoc, etc.
-            gotools
+            pkgs.gotools
 
             # https://github.com/golangci/golangci-lint
-            golangci-lint
+            pkgs.golangci-lint
           ];
         };
       });

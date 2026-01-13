@@ -7,14 +7,14 @@
       pkgs = import nixpkgs { inherit system; };
     in {
       devShells.${system}.default = pkgs.mkShell {
-        buildInputs = with pkgs; [
-          nodejs
-          yarn
-          pnpm
-          # nodePackages.typescript
-          # nodePackages.eslint
-          nodePackages.prettier
-          nodePackages.typescript-language-server
+        packages = [
+          pkgs.nodejs
+          pkgs.yarn
+          pkgs.pnpm
+          # pkgs.nodePackages.typescript
+          # pkgs.nodePackages.eslint
+          pkgs.nodePackages.prettier
+          pkgs.nodePackages.typescript-language-server
         ];
       };
     };

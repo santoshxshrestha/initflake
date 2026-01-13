@@ -7,13 +7,13 @@
       pkgs = import nixpkgs { inherit system; };
     in {
       devShells.${system}.default = pkgs.mkShell {
-        buildInputs = with pkgs; [
-          bash
-          shellcheck
-          shfmt
-          bash-language-server
-          bats
-          jq
+        packages = [
+          pkgs.bash
+          pkgs.shellcheck
+          pkgs.shfmt
+          pkgs.bash-language-server
+          pkgs.bats
+          pkgs.jq
         ];
         shellHook = ''
           # Bash development environment ready
