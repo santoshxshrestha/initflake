@@ -13,7 +13,7 @@
       pkgs = nixpkgs.legacyPackages.${system};
       naerskLib = pkgs.callPackage naersk { };
 
-      runtimedeps = [
+      runTimeDeps = [
         pkgs.libxkbcommon
 
         # GPU backend
@@ -22,15 +22,16 @@
 
         # Window system
         pkgs.wayland
-        pkgs.xorg.libX11
-        pkgs.xorg.libXcursor
-        pkgs.xorg.libXi
+        pkgs.libx11
+        pkgs.libxcursor
+        pkgs.libxi
+        pkgs.zenity
       ];
     in
     {
       packages.${system}.default = naerskLib.buildPackage {
         src = ./.;
-        buildInputs = [ pkgs.openssl ];
+        buildInputs = [ pkgs.openssl ] ++ runTimeDeps;
         nativeBuildInputs = [ pkgs.pkg-config ];
       };
       devShells.${system}.default = pkgs.mkShell {
@@ -42,12 +43,16 @@
           pkgs.openssl
           pkgs.cargo-watch
           pkgs.rust-analyzer
+          # GUI dialog tool for build notifications
+          pkgs.zenity
         ];
         nativeBuildInputs = [ pkgs.pkg-config ];
 
         # env.RUST_SRC_PATH =
         #   "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
-        env.RUSTFLAGS = "-C link-arg=-Wl,-rpath,${nixpkgs.lib.makeLibraryPath runtimedeps}";
+
+        # LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath runTimeDeps;
+        env.RUSTFLAGS = "-C link-arg=-Wl,-rpath,${nixpkgs.lib.makeLibraryPath runTimeDeps}";
       };
       formatter = pkgs.rustfmt;
     };
